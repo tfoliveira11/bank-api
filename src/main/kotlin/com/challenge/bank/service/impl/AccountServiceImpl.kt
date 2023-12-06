@@ -5,7 +5,7 @@ import com.challenge.bank.repository.AccountRepository
 import com.challenge.bank.service.AccountService
 import org.springframework.stereotype.Service
 import org.springframework.util.Assert
-import java.util.*
+import java.util.Optional
 
 @Service
 class AccountServiceImpl(private val repository: AccountRepository) : AccountService {
@@ -17,7 +17,7 @@ class AccountServiceImpl(private val repository: AccountRepository) : AccountSer
     }
 
     override fun getAccounts(): List<Account> {
-        return repository.findAll();
+        return repository.findAll()
     }
 
     override fun getAccountById(id: Long): Optional<Account> {

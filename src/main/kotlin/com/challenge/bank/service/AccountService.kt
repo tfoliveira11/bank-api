@@ -2,7 +2,6 @@ package com.challenge.bank.service
 
 import com.challenge.bank.model.Account
 import java.util.Optional
-import javax.swing.text.html.Option
 
 interface AccountService {
     fun create(account: Account): Account

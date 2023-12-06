@@ -11,7 +11,7 @@ class ExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun illegalArgumentException(request: HttpServletRequest, exception: Exception): ResponseEntity<Any> {
-        return ResponseEntity.badRequest().body(ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.message!!));
+        return ResponseEntity.badRequest().body(ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.message!!))
     }
 }
 
