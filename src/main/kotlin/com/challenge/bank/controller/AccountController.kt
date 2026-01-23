@@ -26,15 +26,15 @@ class AccountController(private val service: AccountService) {
     fun getAll(): List<Account> = service.getAccounts()
 
     @GetMapping("/{id}")
-    fun get(@PathVariable("id") id: Long): ResponseEntity<Account> =
+    fun get(@PathVariable id: Long): ResponseEntity<Account> =
         service.getAccountById(id).map { ResponseEntity.ok(it) }.orElse(ResponseEntity.notFound().build())
 
     @PutMapping("/{id}")
-    fun update(@PathVariable("id") id: Long, @RequestBody account: Account): ResponseEntity<Account> =
+    fun update(@PathVariable id: Long, @RequestBody account: Account): ResponseEntity<Account> =
         service.update(id, account).map { ResponseEntity.ok(it) }.orElse(ResponseEntity.notFound().build())
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> {
+    fun delete(@PathVariable id: Long): ResponseEntity<Void> {
         service.delete(id)
         return ResponseEntity.ok().build<Void>()
     }
