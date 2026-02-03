@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: back-api
+  name: bank-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: back-api
+      app: bank-api
   template:
     metadata:
       labels:
-        app: back-api
+        app: bank-api
     spec:
       containers:
-        - name: back-api
-          image: back-api:latest
+        - name: bank-api
+          image: bank-api:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

@@ -15,7 +15,7 @@ class OpenApiConfig {
     fun customOpenAPI(): OpenAPI {
         val info = Info()
             .title("My Fantastic API")
-            .description("Challenge back-API")
+            .description("Challenge bank-API")
             .version("1.0.0")
 
         val basicScheme = SecurityScheme()
