@@ -2,30 +2,52 @@ package com.challenge.bank.configuration
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.annotation.Order
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfiguration  {
-    @Order(1)
+
     @Bean
     fun apiFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.httpBasic {  }
+        http
+            .csrf { it.disable() }
+            .authorizeHttpRequests { auth ->
+                auth
+                    .requestMatchers("/swagger-ui/**", "/api-docs/**", "/actuator/**", "/h2-console/**").permitAll()
+                    .anyRequest().authenticated()
+            }
+            .httpBasic(Customizer.withDefaults())
+            .sessionManagement { session ->
+                session.sessionCreationPolicy(STATELESS)
+            }
         return http.build()
     }
 
     @Bean
-    fun userDetailsService(): UserDetailsService {
-        val users: User.UserBuilder = User.withDefaultPasswordEncoder()
-        val manager = InMemoryUserDetailsManager()
-        manager.createUser(users.username("user").password("password").roles("USER").build())
-        manager.createUser(users.username("admin").password("password").roles("USER","ADMIN").build())
-        return manager
+    fun userDetailsService(passwordEncoder: PasswordEncoder): UserDetailsService {
+        val userDetails = User.withUsername("user")
+            .password(passwordEncoder.encode("password"))
+            .roles("USER")
+            .build()
+        val adminDetails = User.withUsername("admin")
+            .password(passwordEncoder.encode("password"))
+            .roles("USER", "ADMIN")
+            .build()
+        return InMemoryUserDetailsManager(userDetails, adminDetails)
+    }
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder()
     }
 }
